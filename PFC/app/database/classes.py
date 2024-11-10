@@ -24,8 +24,8 @@ class Product(ProductBase):
        
         
 class UserLogin(BaseModel):
-    username: str = Field(..., max_length=20, min_length = 2, description="Имя пользователя (от 3 до 50 символов)")
-    password: str = Field(..., min_length=6, max_length=100, description="Пароль (минимум 8 символов)")
+    username: str = Field(..., max_length=20,  description="Имя пользователя (от 3 до 50 символов)")
+    password: str = Field(...,  max_length=100, description="Пароль (минимум 8 символов)")
     
 class UserCreate(UserLogin):
     email: EmailStr = Field(..., description="Email пользователя (обязательно и в формате email)")
@@ -43,6 +43,29 @@ class User(BaseModel):
             datetime: lambda v: v.strftime("%d.%m.%Y %H:%M")
         }
 
+        
+class DiaryBase(BaseModel):
+    product_id: int = Field(..., description="Продукт")
+    amount: float = Field(..., ge=1, le=5000, description="Количество продукта в граммах(От 1 до 5000)")
     
+class Diary(DiaryBase):
+    id: int = Field(..., description="Уникальный идентификатор пользователя, назначаемый базой данных")
+    date: datetime = Field(..., description="Дата создания пользователя")
+    
+    daily_proteins: NonNegativeFloat = Field(0.0, ge=0, description="Кол-во белков(больше или равно 0)")
+    daily_fats: NonNegativeFloat = Field(0.0, ge=0, description="Кол-во жиров(больше или равно 0)")
+    daily_carbohydrates: NonNegativeFloat = Field(0.0, ge=0, description="Кол-во углеводов(больше или равно 0)")
+    daily_calories: NonNegativeFloat = Field(0.0, ge=0, le=10000, description="Кол-во калорий(больше или равно 0)")
+    
+    class Config:
+        from_attributes = True
+        json_encoders = {
+            datetime: lambda v: v.strftime("%d.%m.%Y %H:%M")
+        }
+    
+    
+class DiaryCreate(DiaryBase):
+    pass
+
     
        

@@ -7,6 +7,7 @@ from sqlalchemy import select
 from app.database.classes import Product, ProductCreate
 from app.database.models import Product as Product_DB
 from app.database.database import AsyncSession, get_db
+from app.database.operations.jwt.token_manager import check_verify_token
 
 
 router = APIRouter(
@@ -32,8 +33,17 @@ async def get_products(db : AsyncSession = Depends(get_db)) -> List[Product]:
         
         
 @router.post("/add",response_model=Product)
-async def add_product(product: ProductCreate ,db: AsyncSession = Depends(get_db)) -> Product:
-    new_product = Product_DB(name=product.name, description=product.description, proteins=product.proteins, fats=product.fats, carbohydrates=product.carbohydrates, calories=product.calories)
+async def add_product(product: ProductCreate ,db: AsyncSession = Depends(get_db),user_id: int = Depends(check_verify_token)) -> Product:
+    if user_id is None:
+        raise HTTPException(status_code=401,
+                            detail="Пользователь не авторизирован")
+        
+    new_product = Product_DB(name=product.name,
+                             description=product.description,
+                             proteins=product.proteins,
+                             fats=product.fats,
+                             carbohydrates=product.carbohydrates,
+                             calories=product.calories)
     db.add(new_product)
     await db.commit()
     await db.refresh(new_product)
