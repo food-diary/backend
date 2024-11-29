@@ -17,7 +17,7 @@ class ProductCreate(ProductBase):
 
 
 class Product(ProductBase):
-    id: NonNegativeInt = Field(..., ge=1, description="ID продукта(автогенерация в БД-)")
+    id: NonNegativeInt = Field(..., ge=1, description="ID продукта(автогенерация в БД)")
     
     class Config:
         from_attributes = True
