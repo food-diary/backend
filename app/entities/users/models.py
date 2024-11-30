@@ -1,15 +1,15 @@
-from app.database.connect import base
+from app.database.connect import Base
 
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
-class Users(base):
-    __tablename__ = "user"
+class User(Base):
+    __tablename__ = "users"
     
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, index=True, unique=True)
     email = Column(String, index=True, unique=True)
     hash_password = Column(String)
     
-    product = relationship("Products", back_populates="user")
+    product = relationship("Product", back_populates="user")
     

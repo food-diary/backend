@@ -1,11 +1,11 @@
-from app.database.connect import base
+from app.database.connect import Base
 
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class Product(base):
-    __tablename__ = 'product'
+class Product(Base):
+    __tablename__ = 'products'
     
     id = Column(Integer, primary_key=True, index=True) 
     name = Column(String, index=True) 
@@ -14,7 +14,7 @@ class Product(base):
     fats = Column(Float) 
     carbohydrates = Column(Float) 
     calories = Column(Float) 
-    user_id = Column(Integer,nullable=True, index=True, ForeignKey="users.id")
+    user_id = Column(Integer, ForeignKey("users.id") ,nullable=True, index=True,)
     
-    user = relationship("Users", back_populates="product")
+    user = relationship("User", back_populates="product")
 

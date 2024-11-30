@@ -9,10 +9,6 @@ from app.database.run import create_database
 
 app = FastAPI(title="Diary")
 
-async def init_app():
-    await create_database()
-    
-    
 @app.get('/')
 async def hello() -> str:
     return "Hello"
@@ -20,6 +16,6 @@ async def hello() -> str:
 
 if __name__ == "__main__":
     
-    asyncio.run(init_app())
+    asyncio.run(create_database())
     
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
