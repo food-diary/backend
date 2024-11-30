@@ -10,6 +10,7 @@ class ProductBase(BaseModel):
     fats: NonNegativeFloat = Field(0.0, ge=0,description="Кол-во жиров(на 100г.)")
     carbohydrates: NonNegativeFloat = Field(0.0, ge=0,description="Кол-во углеводов(на 100г.)")
     calories: NonNegativeFloat = Field(0.0, ge=0,description="Кол-во калорий(на 100г.)")
+    user_id: Optional[int] = Field(description="ID пользователя,который добавил это,если нет - None")
     
     
 class ProductCreate(ProductBase):

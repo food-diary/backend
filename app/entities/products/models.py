@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 
 class Product(base):
-    __tablename__ = 'products'
+    __tablename__ = 'product'
     
     id = Column(Integer, primary_key=True, index=True) 
     name = Column(String, index=True) 
@@ -14,5 +14,7 @@ class Product(base):
     fats = Column(Float) 
     carbohydrates = Column(Float) 
     calories = Column(Float) 
-    user_id = Column(Integer,nullable=True, index=True)
+    user_id = Column(Integer,nullable=True, index=True, ForeignKey="users.id")
+    
+    user = relationship("Users", back_populates="product")
 
