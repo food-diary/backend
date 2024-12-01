@@ -13,5 +13,6 @@ async def get_session():
     async with AsyncSessionLocal() as session:
         try:
             yield session
-        except:
-            await session.close()
+        except Exception as e:  # Обязательно указывайте тип исключения или сохраняйте его
+            await session.close()  # Закрываем сессию
+            raise e  # Передаём исключение дальше
