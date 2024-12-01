@@ -17,3 +17,13 @@ async def get_all_product(session: AsyncSession) -> List[Product]:
         raise HTTPException(status_code=401, detail="Not found!")
 
     return result
+
+
+async def get_product_by_id(id: int, session: AsyncSession) -> Product:
+    query = await session.execute(select(ProductDB).where(ProductDB.id == id))
+    result = query.scalar_one_or_none()
+    
+    if result is None:
+        raise HTTPException(status_code=401, detail="Not found!")
+
+    return result
