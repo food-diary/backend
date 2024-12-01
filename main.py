@@ -13,7 +13,6 @@ app = FastAPI(title="Diary")
 async def hello() -> str:
     return "Hello"
 
-
 if __name__ == "__main__":
     
     asyncio.run(create_database())
