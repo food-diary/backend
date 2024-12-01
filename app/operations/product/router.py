@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import Depends, HTTPException, APIRouter
+from fastapi import Depends, HTTPException, APIRouter, Response
 from sqlalchemy import select
 
 from app.database.connect import get_session, AsyncSession
@@ -10,6 +10,7 @@ from app.entities.products.models import Product as ProductDB
 
 from app.operations.product.crud import get_all_product as get_all
 from app.operations.product.crud import get_product_by_id as get_by_id
+from app.operations.product.crud import delete_product_by_id as delete_by_id
 
 
 router = APIRouter(prefix="/product",
@@ -25,4 +26,11 @@ async def get_all_product(session: AsyncSession = Depends(get_session)) -> List[
 async def get_product_by_id(id: int,
                             session: AsyncSession = Depends(get_session)) -> Product:
     return await get_by_id(id,
+                     session=session)
+
+
+@router.delete("/delete/{id}", response_class=Response)
+async def delete_product_by_id(id: int,
+                            session: AsyncSession = Depends(get_session)) -> Response:
+    return await delete_by_id(id,
                      session=session)
