@@ -6,8 +6,11 @@ import uvicorn
 
 from app.database.run import create_database
 
+from app.operations.product.router import router as product_router
+
 
 app = FastAPI(title="Diary")
+app.include_router(product_router)
 
 @app.get('/')
 async def hello() -> str:
