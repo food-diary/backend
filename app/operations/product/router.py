@@ -11,6 +11,7 @@ from app.operations.product.crud import get_all_product as get_all
 from app.operations.product.crud import get_product_by_id as get_by_id
 from app.operations.product.crud import delete_product_by_id as delete_by_id
 from app.operations.product.crud import update_product_by_id as update_by_id
+from app.operations.product.crud import add_product as add
 
 
 router = APIRouter(prefix="/product", tags=["Product"])
@@ -31,13 +32,11 @@ async def get_product_by_id(
     return await get_by_id(id, session=session)
 
 
-
 @router.delete("/delete/{id}", response_class=Response)
 async def delete_product_by_id(
     id: int, session: AsyncSession = Depends(get_session)
 ) -> Response:
     return await delete_by_id(id, session=session)
-
 
 
 @router.patch("/update/{id}", response_model=Product)
@@ -46,3 +45,12 @@ async def update_product_by_id(
 ) -> Product:
 
     return await update_by_id(id, product=product, session=session)
+
+
+@router.post("/add", response_model=Product)
+async def add_product(product: ProductCreate,
+                      session: AsyncSession = Depends(get_session)
+) -> Product:
+
+    return await add(product=product, session=session)
+

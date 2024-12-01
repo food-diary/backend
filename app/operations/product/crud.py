@@ -64,3 +64,22 @@ async def update_product_by_id(id: int,
     await session.refresh(result)
     
     return result
+
+
+async def add_product(product: ProductCreate,
+                      session: AsyncSession) -> Product:
+    
+    new_product = ProductDB(
+        name=product.name,
+        description=product.description,
+        proteins=product.proteins,
+        fats=product.fats,
+        carbohydrates=product.carbohydrates,
+        calories=product.calories
+    )
+    
+    session.add(new_product)
+    await session.commit()
+    await session.refresh(new_product)
+    
+    return new_product
