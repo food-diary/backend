@@ -16,3 +16,12 @@ async def get_all_users(session: AsyncSession) -> List[User]:
         raise HTTPException(status_code=401, detail="Not found!")
 
     return result
+
+
+async def get_user_by_id(id: int, session: AsyncSession) -> User:
+    query = await session.execute(select(UserDB).where(UserDB.id == id))
+    result = query.scalar_one_or_none()
+
+    if result is None:
+        raise HTTPException(status_code=401, detail="Not found!")
+    return result
