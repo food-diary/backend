@@ -11,6 +11,8 @@ from app.entities.users.classes import UserCreate
 from app.entities.users.models import User as UserDB
 from app.entities.users.models import User
 
+from app.utils.hash import hash_password as hash_pw
+
 
 async def get_all_users(session: AsyncSession) -> List[User]:
     query = await session.execute(select(UserDB))
@@ -55,8 +57,10 @@ async def update_user_by_id(id: int,
     if result is None:
         raise HTTPException(status_code=401, detail="Not found!")
     
+    hash_password = hash_pw(user.password)
+    
     result.username=user.username
-    result.hash_password=user.password
+    result.hash_password=hash_password
     result.email=user.email
     
     try:
@@ -66,16 +70,17 @@ async def update_user_by_id(id: int,
         return result
     
     except IntegrityError:
-        session.rollback()    
+        await session.rollback()    
         raise HTTPException(status_code=400, detail="Invalid request")
 
 
 async def add_user(user: UserCreate,
                       session: AsyncSession) -> User:
+    hash_password = hash_pw(user.password)
     
     new_user = UserDB(
         username=user.username,
-        hash_password=user.password,
+        hash_password=hash_password,
         email=user.email,
     )
     
@@ -87,7 +92,7 @@ async def add_user(user: UserCreate,
         return new_user
     
     except IntegrityError:
-        session.rollback()    
+        await session.rollback()    
         raise HTTPException(status_code=400, detail="Invalid request")
         
 
