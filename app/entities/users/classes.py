@@ -10,3 +10,8 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: NonNegativeInt = Field(..., ge=1, description="ID пользователя(автогенерация в БД)")
+    
+    
+class UserLogin(BaseModel):
+    username: str = Field(..., min_length=2, max_length=12, description="Имя пользователя от 2 до 12 символов")
+    password: str = Field(..., min_length=4, max_length=15, description="Пароль от 4 до 15 символов")
