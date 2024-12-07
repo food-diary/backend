@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Request, Response
 
 from app.entities.users.classes import User, UserCreate, UserLogin
 
@@ -12,6 +12,8 @@ from app.operations.users.crud import update_user_by_id as update_by_id
 from app.operations.users.crud import add_user as add
 
 from app.operations.users.auth import auth_user as auth
+
+from app.utils.jwt_token import check_verify_token
 
 
 router = APIRouter(prefix="/user", tags=["User"])
@@ -50,6 +52,17 @@ async def add_user(user: UserCreate,
 
 @router.post('/auth')
 async def user_auth(user: UserLogin,
+                    response: Response,
                     db: AsyncSession = Depends(get_session)):
     return await auth(user=user,
+                      response=response,
                       db=db)
+    
+@router.get("/check")
+async def check_token(username: str = Depends(check_verify_token)):
+    return {
+        "message" : f"Привет, ваш ник - {username}"
+    }
+   
+
+    
