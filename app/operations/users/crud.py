@@ -11,7 +11,7 @@ from app.entities.users.classes import UserCreate
 from app.entities.users.models import User as UserDB
 from app.entities.users.models import User
 
-from app.utils.hash import hash_password as hash_pw
+from app.utils.hash_password.hash import hash_password as hash_pw
 
 
 async def get_all_users(session: AsyncSession) -> List[User]:

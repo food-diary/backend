@@ -8,11 +8,13 @@ from app.database.run import create_database
 
 from app.operations.product.router import router as product_router
 from app.operations.users.router import router as user_router
+from app.operations.users.auth_router import router as auth_router
 
 
 app = FastAPI(title="Diary")
 app.include_router(product_router)
 app.include_router(user_router)
+app.include_router(auth_router)
 
 
 @app.get("/")
