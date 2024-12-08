@@ -73,26 +73,5 @@ async def update_user_by_id(id: int,
         await session.rollback()    
         raise HTTPException(status_code=400, detail="Invalid request")
 
-
-async def add_user(user: UserCreate,
-                      session: AsyncSession) -> User:
-    hash_password = hash_pw(user.password)
-    
-    new_user = UserDB(
-        username=user.username,
-        hash_password=hash_password,
-        email=user.email,
-    )
-    
-    try:
-        session.add(new_user)
-        await session.commit()
-        await session.refresh(new_user)
-        
-        return new_user
-    
-    except IntegrityError:
-        await session.rollback()    
-        raise HTTPException(status_code=400, detail="Invalid request")
         
 

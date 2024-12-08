@@ -1,7 +1,7 @@
 from typing import List
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Depends, Response
 
-from app.entities.users.classes import User, UserCreate, UserLogin
+from app.entities.users.classes import User, UserCreate
 
 from app.database.connect import AsyncSession, get_session
 
@@ -9,11 +9,10 @@ from app.operations.users.crud import get_all_users as get_all
 from app.operations.users.crud import get_user_by_id as get_by_id
 from app.operations.users.crud import delete_user_by_id as delete_by_id
 from app.operations.users.crud import update_user_by_id as update_by_id
-from app.operations.users.crud import add_user as add
 
-from app.operations.users.auth_router import auth_user as auth
 
-from app.utils.jwt.jwt_token import check_verify_token
+from app.operations.users.auth import register_user
+
 
 
 router = APIRouter(prefix="/user", tags=["User"])
@@ -28,7 +27,8 @@ async def get_all_users(
 @router.post("/add", response_model=User)
 async def add_user(user: UserCreate,
                       session: AsyncSession = Depends(get_session)) -> User:
-    return await add(user=user, session=session)
+    return await register_user(user=user,
+                               session=session)
 
 
 @router.delete("/delete/{id}", response_class=Response)

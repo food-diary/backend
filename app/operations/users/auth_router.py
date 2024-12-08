@@ -1,10 +1,11 @@
 from fastapi import Depends, Response, APIRouter
 
-from app.entities.users.classes import UserLogin
+from app.entities.users.classes import User, UserCreate, UserLogin
 
 from app.database.connect import AsyncSession, get_session
 
 from app.operations.users.auth import auth_user 
+from app.operations.users.auth import register_user
 from app.utils.jwt.jwt_token import check_verify_token
 
 
@@ -23,10 +24,19 @@ async def check_token(user_id: int = Depends(check_verify_token)):
 @router.post('/login')
 async def user_auth(user: UserLogin,
                     response: Response,
-                    db: AsyncSession = Depends(get_session)):
+                    session: AsyncSession = Depends(get_session)) -> dict:
     return await auth_user(user=user,
                       response=response,
-                      db=db)
+                      session=session)
+    
+    
+@router.post('/register')
+async def user_reg(user: UserCreate,
+                   session: AsyncSession = Depends(get_session)) -> User:
+    
+    return await register_user(user=user,
+                          session=session)
+
 
     
     
