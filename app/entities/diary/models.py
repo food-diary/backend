@@ -10,6 +10,7 @@ class Diary(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), index=True, )
     product_id = Column(Integer, ForeignKey("products.id"))
+    count = Column(Integer)
     day = Column(Date)
     
     diary_user = relationship("User", back_populates="user_diary")
