@@ -1,8 +1,6 @@
-from typing import Optional
-
 import datetime
 
-from pydantic import BaseModel, Field, NonNegativeFloat, NonNegativeInt, date
+from pydantic import BaseModel, Field, NonNegativeInt
 
 
 class DiaryBase(BaseModel):
