@@ -8,7 +8,8 @@ from alembic import context
 from config import SQL_SYNC_DB
 
 from app.entities.products.models import Product
-from app.entities.users.models import User
+from app.entities.users.models import User 
+from app.entities.diary.models import Diary 
 
 from app.database.connect import Base
 

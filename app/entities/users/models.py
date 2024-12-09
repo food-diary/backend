@@ -12,5 +12,5 @@ class User(Base):
     hash_password = Column(String)
     
     user_product = relationship("Product", back_populates="product_user")
-    user_diary = relationship("User", back_populates="diary_user")
+    user_diary = relationship("Diary", back_populates="diary_user")
     

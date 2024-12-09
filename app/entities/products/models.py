@@ -17,5 +17,5 @@ class Product(Base):
     user_id = Column(Integer, ForeignKey("users.id") ,nullable=True, index=True,)
     
     product_user = relationship("User", back_populates="user_product")
-    product_diary_ = relationship("Diary", back_populates="diary_product")
+    product_diary = relationship("Diary", back_populates="diary_product")
 
