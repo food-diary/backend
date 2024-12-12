@@ -14,7 +14,7 @@ class Product(Base):
     fats = Column(Float) 
     carbohydrates = Column(Float) 
     calories = Column(Float) 
-    user_id = Column(Integer, ForeignKey("users.id") ,nullable=True, index=True,)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
     
     product_user = relationship("User", back_populates="user_product")
     product_diary = relationship("Diary", back_populates="diary_product")
