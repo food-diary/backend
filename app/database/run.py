@@ -1,5 +1,6 @@
 from app.entities.products import models
 from app.entities.users import models
+from app.entities.diary import models
 from app.database.connect import Base, engine
 
 

@@ -1,43 +1,30 @@
 from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
+from sqlalchemy import create_engine, pool
 from alembic import context
 
-from config import SQL_SYNC_DB
-
-from app.entities.products.models import Product
-from app.entities.users.models import User 
-from app.entities.diary.models import Diary 
-
+from config import SQL_SYNC_DB  # Используем синхронную строку подключения
 from app.database.connect import Base
+from app.entities.products.models import Product
+from app.entities.users.models import User
+from app.entities.diary.models import Diary
 
-
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# Это объект конфигурации Alembic, который предоставляет
+# доступ к значениям внутри .ini файла
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
+# Интерпретация файла конфигурации для настройки логирования
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
+# Добавьте объект MetaData ваших моделей для поддержки autogenerate
+# Здесь мы указываем метаданные всех ваших моделей
+# Например, Product, User и Diary
+# target_metadata содержит metadata всех моделей
+
 target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
-
-
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode."""
-
+    """Запуск миграций в оффлайн-режиме."""
     context.configure(
         url=SQL_SYNC_DB,
         target_metadata=target_metadata,
@@ -48,29 +35,23 @@ def run_migrations_offline() -> None:
     with context.begin_transaction():
         context.run_migrations()
 
-
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
-
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
-
-    """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        url=SQL_SYNC_DB,
-        prefix="sqlalchemy.",
+    """Запуск миграций в онлайн-режиме."""
+    # Используем синхронный движок для Alembic
+    connectable = create_engine(
+        SQL_SYNC_DB,
         poolclass=pool.NullPool,
+        future=True,  # Включаем поддержку новой версии SQLAlchemy
     )
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection,
+            target_metadata=target_metadata,
         )
 
         with context.begin_transaction():
             context.run_migrations()
-
 
 if context.is_offline_mode():
     run_migrations_offline()
