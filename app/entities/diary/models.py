@@ -8,7 +8,6 @@ class Diary(Base):
     __tablename__ = "users_diary"
     
     id = Column(Integer, primary_key=True, index=True)
-    count = Column(Integer)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True)
     product_id = Column(Integer, ForeignKey("products.id", ondelete="CASCADE"))
     count = Column(Integer)

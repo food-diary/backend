@@ -5,7 +5,6 @@ from pydantic import BaseModel, Field, NonNegativeFloat, NonNegativeInt
 
 class DiaryBase(BaseModel):
     product_id: int = Field(..., description="ID продукта из базы данных")
-    count: int = Field(0,ge=1, description="Кол-во продукта в граммах")
     count: NonNegativeInt = Field(..., description="Кол-во продукта в граммах")
     day: date = Field(default_factory=date.today, description="Дата добавления продукта")
     
