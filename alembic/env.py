@@ -7,6 +7,7 @@ from app.database.connect import Base
 from app.entities.products.models import Product
 from app.entities.users.models import User
 from app.entities.diary.models import Diary
+from app.entities.users_diary.models import UserDiary
 
 # Это объект конфигурации Alembic, который предоставляет
 # доступ к значениям внутри .ini файла
