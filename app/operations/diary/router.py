@@ -27,10 +27,10 @@ async def get_records_for_day(user_id: int = Depends(check_verify_token),
                              day=day)
     
     
-@router.post("/add", response_model=Diary)
+@router.post("/add")
 async def add_new_record(data: DiaryCreate,
                         user_id: int = Depends(check_verify_token),
-                        session: AsyncSession = Depends(get_session)) -> Diary:
+                        session: AsyncSession = Depends(get_session)):
     
     return await new_record(data=data,
                             user_id=user_id,
