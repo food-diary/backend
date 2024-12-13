@@ -56,8 +56,7 @@ async def add_new_record(data: DiaryCreate,
     await session.commit()
     await session.refresh(new_record)
     
-    return {"status" : 200,
-            "msg": "Продукт успешно добавлен!"}
+    return new_record
     
     
 
