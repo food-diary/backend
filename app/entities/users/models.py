@@ -11,5 +11,8 @@ class User(Base):
     email = Column(String, index=True, unique=True)
     hash_password = Column(String)
     
-    product = relationship("Product", back_populates="user")
+    user_product = relationship("Product", back_populates="product_user", cascade="all, delete")
+    user_diary = relationship("Diary", back_populates="diary_user", cascade="all, delete")
+    user_summary = relationship("UserDiary", back_populates="user_diary_users", cascade="all, delete")
+
     
