@@ -11,6 +11,7 @@ from app.entities.diary.models import Diary as DiaryDB
 from app.entities.products.models import Product as ProductDB
 
 from app.database.connect import AsyncSession
+from app.operations.users_diary_sum.counting import update_users_diary
 
 
 
@@ -18,7 +19,8 @@ async def get_records_for_day(user_id: int,
                               day: date,
                               session: AsyncSession) -> List[Diary]:
     query = await session.execute(select(DiaryDB).where(DiaryDB.user_id == user_id,
-                                                            DiaryDB.day == day).options(joinedload(DiaryDB.diary_product)))
+                                                            DiaryDB.day == day)
+                                  .options(joinedload(DiaryDB.diary_product)))
     result = query.scalars().all()
     if not result:
         raise HTTPException(status_code=404,
@@ -44,19 +46,23 @@ async def add_new_record(data: DiaryCreate,
     if result is None:
         raise HTTPException(status_code=404,
                             detail="Product not found!")
-
-    new_record = DiaryDB(
-                user_id=user_id,
-                product_id=data.product_id,
-                count=data.count,
-                day=data.day
-    )
-    
-    session.add(new_record)
-    await session.commit()
-    await session.refresh(new_record)
-    
-    return new_record
+    else:
+        new_record = DiaryDB(
+                    user_id=user_id,
+                    product_id=data.product_id,
+                    count=data.count,
+                    day=data.day
+        )
+        
+        session.add(new_record)
+        await session.commit()
+        await session.refresh(new_record)
+        
+        await update_users_diary(data=new_record,
+                                product=result,
+                                session=session)
+        
+        return new_record
     
     
 

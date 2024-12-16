@@ -8,6 +8,7 @@ from app.entities.diary.classes import Diary, DiaryCreate
 
 from app.database.connect import AsyncSession, get_session
 from app.utils.jwt.jwt_token import check_verify_token
+
 from app.operations.diary.crud import get_records_for_day as get_for_day
 from app.operations.diary.crud import add_new_record as new_record
 
